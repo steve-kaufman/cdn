@@ -103,15 +103,12 @@ var engine = Matter.Engine.create();
 Matter.Engine.run(engine);
 
 var IO = {
-    currentPressed : null,
-    lastPressed : null,
     tapped : null,
-    keys : {},
+    keys : [],
     isPressed : function(key){
-        if(this.keys[key]) return(true);
-    },
-    wasPressed : function(key){
-        if(this.lastPressed == key) return(true);
+        for(var i in this.keys){
+            if(this.keys[i] == key) return true;
+        }
     },
     keyTapped : function(key){
         if(this.tapped == key) return(true);
@@ -119,20 +116,17 @@ var IO = {
 };
 document.addEventListener('keydown', function(e){
     var key = e.keyCode;
-    if(key != IO.currentPressed){
-        IO.tapped = key;
-        IO.currentPressed = key;
-        IO.lastPressed = key;
+    if(key != IO.keys[IO.keys.length - 1]){
+        IO.keys.push(key);
     }
-    
-    if(!IO.keys[key]) IO.keys[key] = true;
+    if(IO.tapped != key) IO.tapped = key;
+    if(IO.keys.length > 5) IO.keys.shift();
 });
 document.addEventListener('keyup', function(e){
     var key = e.keyCode;
-    if(key == IO.currentPressed){
-        IO.currentPressed = null;
+    for(var i in IO.keys){
+        if(IO.keys[i] == key) IO.keys.splice(i, 1);
     }
-    if(IO.keys[key]) IO.keys[key] = false;
 });
 
 var Canvas = {
