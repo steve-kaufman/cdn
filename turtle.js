@@ -276,7 +276,7 @@ var Render = {
     running : false,
     start : function(){
         this.running = true;
-        if(renderInit) renderInit();
+        if(window.renderInit) renderInit();
         this.run();
     },
     stop : function(){
